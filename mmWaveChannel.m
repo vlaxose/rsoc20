@@ -1,9 +1,8 @@
-function H = mmWaveChannel(Nr, Nt, K, nodeLocations)
+function H = mmWaveChannel(Nr, Nt, K, nodeLocations, Lmax)
 
 % Initialization
-Lmax = 15;
 H = zeros(Nr, Nt, K);
-Ghz = 30;
+Ghz = 28;
 wavelength = 30/Ghz; % w=c/lambda
 
 theta = zeros(K,1);
@@ -23,7 +22,7 @@ for k=1:K
  		if(ell==1)
 			channel_coef = 1*randn(1)/(4*pi/wavelength*distanceFromBS(k, 1)^2);
 		else
-			channel_coef = 0.1*randn(1)/(4*pi/wavelength*distanceFromBS(k, 1)^2);
+			channel_coef = 0.8*randn(1)/(4*pi/wavelength*distanceFromBS(k, 1)^2);
 
     end
 		H(:,:,k) = H(:,:,k) + channel_coef * ar*at';

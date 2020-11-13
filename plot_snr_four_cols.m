@@ -3,7 +3,7 @@ clc
 
 % snr_range = [0 3 5 8 11 14 17 20];
 snr_range = [0 5 11 17];
-Nt=8;Lt=8;Nr=8;K=5;
+Nt=32;Lt=8;Nr=8;K=5;Lmax=15;
 
 totalMCrealizations = 100;
 rate = zeros(totalMCrealizations, length(snr_range), 6);
@@ -12,7 +12,7 @@ power = zeros(totalMCrealizations, length(snr_range), 6);
 for snr_index = 1:length(snr_range)
     noise_variance = sqrt(10^(-snr_range(snr_index)/10));    
     for r=1:totalMCrealizations
-        [rate(r, snr_index, :), power(r, snr_index, :)] = systemModel(Nt, Nr, Lt, K, noise_variance);
+        [rate(r, snr_index, :), power(r, snr_index, :)] = systemModel(Nt, Nr, Lt, K, noise_variance, Lmax);
     end
 end
 mean_rate = squeeze(sum(rate, 1))/totalMCrealizations;
@@ -22,7 +22,7 @@ mean_ee = zeros(size(mean_rate));
 
 
 figure;
-subplot(1,3,1);
+subplot(1,4,1);
 p1=plot(snr_range, mean_rate(:, 1)); hold on;
 set(p1,'LineWidth',1, 'LineStyle', '-', 'Color', 'Black');
 p2=plot(snr_range, mean_rate(:, 2)); hold on;
@@ -37,9 +37,26 @@ p6=plot(snr_range, mean_rate(:, 6)); hold on;
 set(p6,'LineWidth',1.5, 'LineStyle', '-', 'Color', 'Red', 'Marker', 'h');
 grid on;
 xlabel('SNR (dB)', 'FontSize', 12)
-ylabel({'Rate', '(Mbits/sec)'}, 'FontSize', 12)
+ylabel({'Spectral Efficiency', '(Mbits/sec)'}, 'FontSize', 12)
 
-subplot(1,3,2);
+subplot(1,4,2);
+p1=plot(snr_range, mean_power(:, 1)); hold on;
+set(p1,'LineWidth',1, 'LineStyle', '-', 'Color', 'Black');
+p2=plot(snr_range, mean_power(:, 2)); hold on;
+set(p2,'LineWidth',1, 'LineStyle', '--', 'Color', 'Black');
+p3=plot(snr_range, mean_power(:, 3)); hold on;
+set(p3,'LineWidth',1, 'LineStyle', '-.', 'Color', 'Black');
+p4=plot(snr_range, mean_power(:, 4)); hold on;
+set(p4,'LineWidth',1.5, 'LineStyle', '-', 'Color', 'Green', 'Marker', 'o');
+p5=plot(snr_range, mean_power(:, 5)); hold on;
+set(p5,'LineWidth',1.5, 'LineStyle', '-', 'Color', 'Blue', 'Marker', 's');
+p6=plot(snr_range, mean_power(:, 6)); hold on;
+set(p6,'LineWidth',1.5, 'LineStyle', '-', 'Color', 'Red', 'Marker', 'h');
+grid on;
+xlabel('SNR (dB)', 'FontSize', 12)
+ylabel({'Power', '(Joules)'}, 'FontSize', 12)
+
+subplot(1,4,3);
 
 mean_ee(:, 1) = mean_rate(:, 1)./mean_power(:, 1);
 p1=plot(snr_range, mean_ee(:, 1)); hold on;
@@ -63,7 +80,7 @@ grid on;
 xlabel('SNR (dB)', 'FontSize', 12)
 ylabel({'Energy Efficiency', '(Mbits/Joule)'}, 'FontSize', 12)
 
-subplot(1,3,3);
+subplot(1,4,4);
 
 p1=plot(mean_rate(:, 1), mean_ee(:, 1)); hold on;
 set(p1,'LineWidth',1, 'LineStyle', '-', 'Color', 'Black');
@@ -83,5 +100,5 @@ ylabel({'Energy Efficiency', '(Mbits/Joule)'}, 'FontSize', 12)
 lg = legend('Digital BF', 'Analog BF', 'Hybrid BF', 'Hybrid BF with RF minimization', 'Hybrid BF with RF exhaustive search', 'Proposed');
 lg.FontSize = 12;
 
-savefig(['./results/ee_snr_three_cols',num2str(Nt),'_',num2str(Lt),'_',num2str(Nr),'.fig'])
-saveas(gcf,['./results/ee_snr_three_cols',num2str(Nt),'_',num2str(Lt),'_',num2str(Nr),'.eps'],'epsc')
+savefig(['./results/ee_snr_four_cols_',num2str(Nt),'_',num2str(Lt),'_',num2str(Nr),'.fig'])
+saveas(gcf,['./results/ee_snr_four_cols_',num2str(Nt),'_',num2str(Lt),'_',num2str(Nr),'.eps'],'epsc')

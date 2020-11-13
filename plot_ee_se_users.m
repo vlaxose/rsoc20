@@ -2,7 +2,7 @@ clear
 clc
 
 users_range = [1 5 10 15 20];
-Nt=32;Lt=8;Nr=8;K=5;
+Nt=32;Lt=8;Nr=8;K=5;Lmax=15;
 
 totalMCrealizations = 500;
 rate = zeros(totalMCrealizations, length(users_range), 6);
@@ -12,7 +12,7 @@ noise_variance = sqrt(10^(-5/10));
 for user_index = 1:length(users_range)
     K = users_range(user_index);
     for r=1:totalMCrealizations
-        [rate(r, user_index, :), power(r, user_index, :)] = systemModel(Nt, Nr, Lt, K, noise_variance);
+        [rate(r, user_index, :), power(r, user_index, :)] = systemModel(Nt, Nr, Lt, K, noise_variance, Lmax);
     end
 end
 mean_rate = squeeze(sum(rate, 1))/totalMCrealizations;
