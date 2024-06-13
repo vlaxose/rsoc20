@@ -10,4 +10,4 @@ in The Royal Society Publishing.
 
 The code runs on MATLAB 2020b.
 
-Contact person email: evlachos@isi.gr
+Contact person email: evlachos@athenarc.gr
